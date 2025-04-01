@@ -2,6 +2,7 @@ const cartaWidth = 100; //ancho carta
 const cartaHeight = 150; //alto carta
 const espaciado = 20; //espacio entre cartas
 let cartas = [];
+let cartaSeleccionada = null;
 
 
 function setup() {
@@ -72,6 +73,22 @@ function mousePressed() {
         
         if (mouseX > carta.x && mouseX < carta.x + carta.width && mouseY > carta.y && mouseY < carta.y + carta.height) {
             console.log("id de la carta clickeada: " + carta.id); 
+
+            //verificar si las cartas son iguales
+            if (cartaSeleccionada === null) {
+                cartaSeleccionada = carta;  //se guarda la carta seleccionada
+
+            } else {
+                //si ya se ha seleccionada una carta compara con la nueva
+                if (cartaSeleccionada.id === carta.id) {
+                    console.log("si es la misma cartaaa!!!");
+                }
+
+                //reinicia la bandera
+                cartaSeleccionada = null;
+            }
         }
+
+
     }
 }
