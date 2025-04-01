@@ -4,7 +4,7 @@ const espaciado = 20; //espacio entre cartas
 let cartas = [];
 let cartaSeleccionada = null;
 let imagenesPokemon = [];
-
+let score = 0;
 
 function setup() {
     createCanvas(1230, 500);
@@ -91,6 +91,11 @@ async function cargarImagenesPokemon(numCartas) {
     }
 }
 
+function actualizarPuntaje() {
+    document.getElementById("score").innerText = `Score: ${score}`;
+}
+setInterval(actualizarPuntaje, 1000);
+
 //la funcion para cuando se pica el mouse
 function mousePressed() {
     for (let i = 0; i < cartas.length; i++) {
@@ -113,6 +118,8 @@ function mousePressed() {
                     console.log("si es la misma cartaaa!!!");
                     cartaSeleccionada.enable = false;
                     carta.enable = false;
+                    score += 10;
+                    console.log(score)
                 }
                 
                 //timer
