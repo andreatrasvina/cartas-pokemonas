@@ -64,6 +64,14 @@ function setup() {
             yPos += cartaHeight + espaciado;
         }
     }
+
+    //GANASTEIS
+    if (score === 100) {
+        fill(255, 20, 147);
+        textSize(50);
+        textAlign(CENTER, CENTER);
+        text("🎉 GANASTE EL JUEGO 🎉", width / 2, 420);
+    }
 }
 
 function barajeo(array) {
@@ -101,7 +109,7 @@ function mousePressed() {
     for (let i = 0; i < cartas.length; i++) {
         let carta = cartas[i];
 
-        if (!carta.enable) continue;
+        if (!carta.enable || carta.descubierta) continue;
         
         if (mouseX > carta.x && mouseX < carta.x + carta.width && mouseY > carta.y && mouseY < carta.y + carta.height) {
             console.log("id de la carta clickeada: " + carta.id); 
@@ -110,6 +118,7 @@ function mousePressed() {
             if (cartaSeleccionada === null) {
                 cartaSeleccionada = carta;  //se guarda la carta seleccionada
                 carta.descubierta = true;
+                
             } else {
                 //si ya se ha seleccionada una carta compara con la nueva
                 carta.descubierta = true;
