@@ -137,7 +137,7 @@ function mousePressed() {
                         cartaSeleccionada.descubierta = false;
                         carta.descubierta = false;
                         cartaSeleccionada = null;
-                    }, 1000);
+                    }, 500);
                 } else {
                     cartaSeleccionada = null;  //reinicia la bandera si es par correcto
                 }
