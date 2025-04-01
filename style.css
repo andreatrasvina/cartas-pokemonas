@@ -1,17 +1,22 @@
 body {
     font-family: Arial;
-    background-color: #ffe5f0;
+    background-color: #ffedf6;
     text-align: center;
 }
 
 h1 {
     margin-top: 20px;
+    color: #ff8dc7;
+
 }
 
 #score{
     margin-bottom: 20px;
+    color: #ff8dc7;
 }
 
 canvas {
     border-radius: 15px;
+    box-shadow: 0 0px 10px rgba(255, 20, 147, 0.7); 
+    border: 0px solid #ff1493; 
 }
