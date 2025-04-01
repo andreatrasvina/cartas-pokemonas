@@ -111,6 +111,7 @@ function mousePressed() {
                 
                 if (cartaSeleccionada.id === carta.id) {
                     console.log("si es la misma cartaaa!!!");
+                    cartaSeleccionada.enable = false;
                     carta.enable = false;
                 }
                 
