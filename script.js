@@ -3,6 +3,7 @@ const cartaHeight = 150; //alto carta
 const espaciado = 20; //espacio entre cartas
 let cartas = [];
 let cartaSeleccionada = null;
+let imagenesPokemon = [];
 
 
 function setup() {
@@ -10,15 +11,18 @@ function setup() {
 
     const numCartas = 10; //10 pares de cartas
 
+    cargarImagenesPokemon(numCartas);
+
     //se duplica la carta par
     for (let i = 0; i < numCartas; i++) {
         
         let carta = {
             id: i + 1,//carta id unico
-            x: 0,  
-            y: 0, 
             width: cartaWidth,
-            height: cartaHeight
+            height: cartaHeight,
+            imagen: null,
+            descubierta: false,
+            enable: true
         };
         //añadir la carta por par
         cartas.push(carta);
@@ -43,11 +47,15 @@ function setup() {
         carta.y = yPos;
 
         //dibuja la carta
-        fill(255, 178, 219);
-        stroke(0); 
-        stroke(255, 20, 147, 0.7 * 255); 
-        strokeWeight(1);
-        rect(carta.x, carta.y, carta.width, carta.height);
+        if (carta.descubierta) {
+            image(carta.imagen, carta.x, carta.y, carta.width, carta.height);
+        } else {
+            fill(255, 178, 219);
+            stroke(0); 
+            stroke(255, 20, 147, 0.7 * 255); 
+            strokeWeight(1);
+            rect(carta.x, carta.y, carta.width, carta.height);
+        }
 
         //sig fila para que no se duplique
         xPos += cartaWidth + espaciado;
@@ -65,11 +73,30 @@ function barajeo(array) {
     }
 }
 
+async function cargarImagenesPokemon(numCartas) {
+    //consulta api
+    for (let i = 1; i <= numCartas; i++) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
+        const respuesta = await fetch(url);
+        const data = await respuesta.json();
+        const spriteUrl = data.sprites.front_default;  //sprite
+
+        imagenesPokemon.push(loadImage(spriteUrl));
+    }
+
+    //asigna img a cada carta pero basada en el id
+    for (let i = 0; i < cartas.length; i++) {
+        const imagenIndex = cartas[i].id - 1;  //indice id de la imagen
+        cartas[i].imagen = imagenesPokemon[imagenIndex % numCartas]; 
+    }
+}
+
 //la funcion para cuando se pica el mouse
 function mousePressed() {
     for (let i = 0; i < cartas.length; i++) {
         let carta = cartas[i];
 
+        if (!carta.enable) continue;
         
         if (mouseX > carta.x && mouseX < carta.x + carta.width && mouseY > carta.y && mouseY < carta.y + carta.height) {
             console.log("id de la carta clickeada: " + carta.id); 
@@ -77,15 +104,26 @@ function mousePressed() {
             //verificar si las cartas son iguales
             if (cartaSeleccionada === null) {
                 cartaSeleccionada = carta;  //se guarda la carta seleccionada
-
+                carta.descubierta = true;
             } else {
                 //si ya se ha seleccionada una carta compara con la nueva
+                carta.descubierta = true;
+                
                 if (cartaSeleccionada.id === carta.id) {
                     console.log("si es la misma cartaaa!!!");
+                    carta.enable = false;
                 }
-
-                //reinicia la bandera
-                cartaSeleccionada = null;
+                
+                //timer
+                if (cartaSeleccionada.id !== carta.id) {
+                    setTimeout(() => {
+                        cartaSeleccionada.descubierta = false;
+                        carta.descubierta = false;
+                        cartaSeleccionada = null;
+                    }, 1000);
+                } else {
+                    cartaSeleccionada = null;  //reinicia la bandera si es par correcto
+                }
             }
         }
 
